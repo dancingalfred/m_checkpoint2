@@ -19,11 +19,40 @@ def read_dict():
     dbconn.close()
     return rows
 
+def add_to_dict(word,translation):
+    dbconn = db_connection()
+    cur = dbconn.cursor()
+    cur.execute("INSERT INTO dictionary (word, translation) VALUES (%s, %s);",(word, translation))
+    dbconn.commit()
+    cur.close()
+    dbconn.close()
+    return "done"
+
+
+def delete_from_dict(word):
+    dbconn = db_connection()
+    cur = dbconn.cursor()
+    cur.execute("DELETE FROM dictionary WHERE word = %s;", (word,))
+    dbconn.commit()
+    cur.close()
+    dbconn.close()
+    return "done"
+
 
 while True: ## REPL - Read Execute Program Loop
     cmd = input("Command: ")
 
+
+    if cmd == "list":
+        print(read_dict())
+    if cmd == "add":
+        new_word = input("Type new word: ")
+        new_translation = input("Type new translation: ")
+        add_to_dict(new_word,new_translation)
+    if cmd == "delete":
+        del_word = input("Type word to delete: ")
+        delete_from_dict(del_word)
     if cmd == "quit":
         exit()
-    else:
-        print(read_dict())
+    # else:
+    #     print(read_dict())
